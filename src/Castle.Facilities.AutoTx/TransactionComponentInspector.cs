@@ -19,6 +19,7 @@ namespace Castle.Facilities.AutoTx
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Reflection;
 	using Core;
 	using Core.Configuration;
@@ -108,39 +109,66 @@ namespace Castle.Facilities.AutoTx
 		/// <param name="store">The store.</param>
 		private void Validate(ComponentModel model, TransactionMetaInfoStore store)
 		{
-			if (model.Service == null || model.Service.IsInterface)
+			TransactionMetaInfo meta;
+			var problematicMethods = new List<string>();
+
+			foreach (var service in model.Services)
 			{
-				return;
-			}
-
-			TransactionMetaInfo meta = store.GetMetaFor(model.Implementation);
-
-			if (meta == null)
-			{
-				return;
-			}
-
-			ArrayList problematicMethods = new ArrayList();
-
-			foreach(MethodInfo method in meta.Methods)
-			{
-				if (!method.IsVirtual)
+				if (service == null
+				    || service.IsInterface
+				    || (meta = store.GetMetaFor(model.Implementation)) == null
+				    || (problematicMethods = (
+				                             	from method in meta.Methods
+				                             	where !method.IsVirtual
+				                             	select method.Name
+				                             ).ToList())
+				       	.Count == 0)
 				{
-					problematicMethods.Add(method.Name);
+					return;
 				}
 			}
 
-			if (problematicMethods.Count != 0)
-			{
-				String[] methodNames = (String[]) problematicMethods.ToArray(typeof(String));
+			throw new FacilityException(
+				string.Format(
+					"The class {0} wants to use transaction interception, " +
+					"however the methods must be marked as virtual in order to do so. Please correct " +
+					"the following methods: {1}",
+					model.Implementation.FullName,
+					string.Join(", ", problematicMethods.ToArray())));
 
-				String message = String.Format("The class {0} wants to use transaction interception, " +
-				                               "however the methods must be marked as virtual in order to do so. Please correct " +
-				                               "the following methods: {1}", model.Implementation.FullName,
-				                               String.Join(", ", methodNames));
+			//if (model.Service == null || model.Service.IsInterface)
+			//{
+			//	return;
+			//}
 
-				throw new FacilityException(message);
-			}
+			//TransactionMetaInfo meta = store.GetMetaFor(model.Implementation);
+
+			//if (meta == null)
+			//{
+			//	return;
+			//}
+
+			//ArrayList problematicMethods = new ArrayList();
+
+			//foreach(MethodInfo method in meta.Methods)
+			//{
+			//	if (!method.IsVirtual)
+			//	{
+			//		problematicMethods.Add(method.Name);
+			//	}
+			//}
+
+			//if (problematicMethods.Count != 0)
+			//{
+			//	String[] methodNames = (String[]) problematicMethods.ToArray(typeof(String));
+
+			//	String message = String.Format("The class {0} wants to use transaction interception, " +
+			//								   "however the methods must be marked as virtual in order to do so. Please correct " +
+			//								   "the following methods: {1}", model.Implementation.FullName,
+			//								   String.Join(", ", methodNames));
+
+			//	throw new FacilityException(message);
+			//}
 		}
 
 		/// <summary>
@@ -167,8 +195,8 @@ namespace Castle.Facilities.AutoTx
 			if (configuration != null && configuration.Children[TransactionNodeName] != null)
 			{
 				String message = String.Format("The class {0} has configured transaction in a child node but has not " +
-				                               "specified istransaction=\"true\" on the component node.",
-				                               model.Implementation.FullName);
+											   "specified istransaction=\"true\" on the component node.",
+											   model.Implementation.FullName);
 
 				throw new FacilityException(message);
 			}
@@ -179,8 +207,8 @@ namespace Castle.Facilities.AutoTx
 		/// </summary>
 		/// <param name="model">The model.</param>
 		/// <param name="store">The meta information store.</param>
-		private static void AddTransactionInterceptorIfIsTransactional(ComponentModel model,
-		                                                               TransactionMetaInfoStore store)
+		private void AddTransactionInterceptorIfIsTransactional(ComponentModel model,
+																	   TransactionMetaInfoStore store)
 		{
 			TransactionMetaInfo meta = store.GetMetaFor(model.Implementation);
 
@@ -190,7 +218,7 @@ namespace Castle.Facilities.AutoTx
 			}
 
 			model.Dependencies.Add(
-				new DependencyModel(DependencyType.Service, null, typeof(TransactionInterceptor), false));
+				new DependencyModel(this.ObtainNodeName(), typeof(TransactionInterceptor), false));
 
 			model.Interceptors.AddFirst(new InterceptorReference(typeof(TransactionInterceptor)));
 		}

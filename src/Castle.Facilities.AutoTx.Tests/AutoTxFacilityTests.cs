@@ -34,7 +34,7 @@ namespace Castle.Facilities.AutoTx.Tests
 		{
 			var c = new WindsorContainer(new DefaultConfigurationStore());
 
-			c.AddFacility("transactionmanagement", new TransactionFacility());
+			c.AddFacility(new TransactionFacility());
 			c.Register(Component.For<ITransactionManager>().ImplementedBy<MockTransactionManager>().Named("transactionmanager"));
 			c.Register(Component.For<ISomething>().ImplementedBy<AClass>().Named("AClass"));
 
@@ -53,7 +53,7 @@ namespace Castle.Facilities.AutoTx.Tests
 		{
 			var container = new WindsorContainer();
 
-			container.AddFacility("transactionmanagement", new TransactionFacility());
+			container.AddFacility(new TransactionFacility());
 			container.Register(
 				Component.For<ITransactionManager>().ImplementedBy<MockTransactionManager>().Named("transactionmanager"));
 
@@ -75,7 +75,7 @@ namespace Castle.Facilities.AutoTx.Tests
 
 		{
 			IWindsorContainer container = new WindsorContainer();
-			container.AddFacility("transactionmanagement", new TransactionFacility());
+			container.AddFacility(new TransactionFacility());
 			container.Register(
 				Component.For<ITransactionManager>().ImplementedBy<MockTransactionManager>().Named("transactionmanager"));
 			container.Register(Component.For<CustomerService>().Named("mycomp"));

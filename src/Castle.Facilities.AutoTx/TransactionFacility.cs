@@ -76,7 +76,7 @@ namespace Castle.Facilities.AutoTx
 			AssertHasDirectories();
 
 			Kernel.Register(
-				Component.For<TransactionInterceptor>().Named("transaction.interceptor"),
+				Component.For<TransactionInterceptor>(), //.Named("transaction.interceptor"),
 				Component.For<TransactionMetaInfoStore>().Named("transaction.MetaInfoStore"),
 				Component.For<IMapPath>().ImplementedBy<MapPathImpl>().Named("directory.adapter.mappath")
 				);
@@ -110,19 +110,22 @@ namespace Castle.Facilities.AutoTx
 
 		void Kernel_ComponentRegistered(string key, Castle.MicroKernel.IHandler handler)
 		{
-			if (handler.ComponentModel.Service.IsAssignableFrom(typeof(ITransactionManager)))
+			foreach (var service in handler.ComponentModel.Services)
 			{
-				var transactionManager = Kernel.Resolve<ITransactionManager>();
+				if (service.IsAssignableFrom(typeof(ITransactionManager)))
+				{
+					var transactionManager = this.Kernel.Resolve<ITransactionManager>();
 
-				((DirectoryAdapter)Kernel.Resolve<IDirectoryAdapter>()).TxManager = transactionManager;
-				((FileAdapter)Kernel.Resolve<IFileAdapter>()).TxManager = transactionManager;
+					((DirectoryAdapter) this.Kernel.Resolve<IDirectoryAdapter>()).TxManager = transactionManager;
+					((FileAdapter) this.Kernel.Resolve<IFileAdapter>()).TxManager = transactionManager;
+				}
 			}
 		}
 
 		/// <summary>
 		/// Disposes the facilitiy.
 		/// </summary>
-		public override void Dispose()
+		protected override void Dispose()
 		{
 			Kernel.ComponentRegistered -= Kernel_ComponentRegistered;
 			base.Dispose();
