@@ -10,3 +10,6 @@ _ReSharper*
 *.cache
 Castle.Services.Transaction.user
 * Thumbs.db
+*.user
+/src/AutoTxAssemblyInfo.cs
+/src/TxAssemblyInfo.cs
