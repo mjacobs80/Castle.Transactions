@@ -20,8 +20,10 @@ namespace Castle.Services.Transaction
 	using System;
 	using System.Collections.Generic;
 	using System.Threading;
+
+	using Castle.Core.Logging;
+
 	using Core;
-	using log4net;
 
 	/// <summary>
 	/// Utility class for whatever is needed to make the code better.
@@ -108,7 +110,7 @@ namespace Castle.Services.Transaction
 		/// Given a logger and action, performs the action and catches + logs exceptions.
 		/// </summary>
 		/// <returns>Whether the lambda was a success or not.</returns>
-		public static Error TryLogFail(this ILog logger, Action a)
+		public static Error TryLogFail(this ILogger logger, Action a)
 		{
 			try
 			{
@@ -117,7 +119,7 @@ namespace Castle.Services.Transaction
 			}
 			catch (Exception e)
 			{
-				logger.Error(e);
+				logger.Error(e.Message, e);
 				return new Error(false, e);
 			}
 		}

@@ -17,13 +17,14 @@
 namespace Castle.Services.Transaction
 {
 	using System;
-	using log4net;
+
+	using Castle.Core.Logging;
 
 	public class DefaultTransactionManager : MarshalByRefObject, ITransactionManager
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof (DefaultTransactionManager));
+		private ILogger _Logger = NullLogger.Instance;
 	
-		private IActivityManager activityManager;
+		private IActivityManager _ActivityManager;
 
 		public event EventHandler<TransactionEventArgs> TransactionCreated;
 		public event EventHandler<TransactionEventArgs> TransactionRolledBack;
@@ -48,9 +49,18 @@ namespace Castle.Services.Transaction
 		{
 			if (activityManager == null) throw new ArgumentNullException("activityManager");
 
-			this.activityManager = activityManager;
+			this._ActivityManager = activityManager;
 			
-			if (logger.IsDebugEnabled) logger.Debug("DefaultTransactionManager created.");
+			if (this._Logger.IsDebugEnabled)
+			{
+				this._Logger.Debug("DefaultTransactionManager created.");
+			}
+		}
+
+		public ILogger Logger
+		{
+			get { return this._Logger; }
+			set { this._Logger = value; }
 		}
 
 		/// <summary>
@@ -60,11 +70,11 @@ namespace Castle.Services.Transaction
 		/// <value>The activity manager.</value>
 		public IActivityManager ActivityManager
 		{
-			get { return activityManager; }
+			get { return this._ActivityManager; }
 			set
 			{
 				if (value == null) throw new ArgumentNullException("value");
-				activityManager = value;
+				this._ActivityManager = value;
 			}
 		}
 
@@ -97,7 +107,7 @@ namespace Castle.Services.Transaction
 				{
 					transaction = ((TransactionBase)CurrentTransaction).CreateChildTransaction();
 
-					logger.DebugFormat("Child transaction \"{0}\" created with mode '{1}'.", transaction.Name, txMode);
+					this._Logger.DebugFormat("Child transaction \"{0}\" created with mode '{1}'.", transaction.Name, txMode);
 				}
 			}
 
@@ -114,10 +124,10 @@ namespace Castle.Services.Transaction
 #endif
 				}
 
-				logger.DebugFormat("Transaction \"{0}\" created. ", transaction.Name);
+				this._Logger.DebugFormat("Transaction \"{0}\" created. ", transaction.Name);
 			}
 
-			activityManager.CurrentActivity.Push(transaction);
+			this._ActivityManager.CurrentActivity.Push(transaction);
 
 			if (transaction.IsChildTransaction)
 				ChildTransactionCreated.Fire(this, new TransactionEventArgs(transaction));
@@ -130,6 +140,7 @@ namespace Castle.Services.Transaction
         private TransactionBase InstantiateTransaction(TransactionMode mode, IsolationMode isolationMode, bool ambient, bool readOnly)
 		{
 			var t = new TalkativeTransaction(mode, isolationMode, ambient, readOnly);
+        	t.Logger = this.Logger.CreateChildLogger("TalkactiveTransaction");
 
 			t.TransactionCompleted += CompletedHandler;
 			t.TransactionRolledBack += RolledBackHandler;
@@ -164,7 +175,7 @@ namespace Castle.Services.Transaction
 				var message = "There is a transaction active and the transaction mode " +
 				              "explicit says that no transaction is supported for this context";
 
-				logger.Error(message);
+				this._Logger.Error(message);
 
 				throw new TransactionModeUnsupportedException(message);
 			}
@@ -190,7 +201,7 @@ namespace Castle.Services.Transaction
 		/// <remarks>Thread-safety of this method depends on that of the <see cref="IActivityManager.CurrentActivity"/>.</remarks>
 		public ITransaction CurrentTransaction
 		{
-			get { return activityManager.CurrentActivity.CurrentTransaction; }
+			get { return this._ActivityManager.CurrentActivity.CurrentTransaction; }
 		}
 
 		/// <summary>
@@ -201,7 +212,7 @@ namespace Castle.Services.Transaction
 		{
 			if (transaction == null) throw new ArgumentNullException("transaction", "Tried to dispose a null transaction");
 
-			logger.DebugFormat("Trying to dispose transaction {0}.", transaction.Name);
+			this._Logger.DebugFormat("Trying to dispose transaction {0}.", transaction.Name);
 
 			if (CurrentTransaction != transaction)
 			{
@@ -209,7 +220,7 @@ namespace Castle.Services.Transaction
 				                            "transaction");
 			}
 
-			activityManager.CurrentActivity.Pop();
+			this._ActivityManager.CurrentActivity.Pop();
 
 			if (transaction is IDisposable)
 			{
@@ -225,7 +236,7 @@ namespace Castle.Services.Transaction
 
 			TransactionDisposed.Fire(this, new TransactionEventArgs(transaction));
 
-			logger.DebugFormat("Transaction {0} disposed successfully", transaction.Name);
+			this._Logger.DebugFormat("Transaction {0} disposed successfully", transaction.Name);
 		}
 
 		/// <summary>

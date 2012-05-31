@@ -23,13 +23,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
 using Castle.Core;
-using log4net;
 
 namespace Castle.Services.Transaction
 {
+	using Castle.Core.Logging;
+
 	public abstract class TransactionBase : MarshalByRefObject, ITransaction, IDisposable
 	{
-		private static readonly ILog _Logger = LogManager.GetLogger(typeof (TransactionBase));
+		private ILogger _Logger = NullLogger.Instance;
 		private readonly IsolationMode _IsolationMode;
 
 		private readonly IList<IResource> _Resources = new List<IResource>();
@@ -47,6 +48,12 @@ namespace Castle.Services.Transaction
 			_IsolationMode = isolationMode;
 			Status = TransactionStatus.NoTransaction;
 			Context = new Hashtable();
+		}
+
+		public ILogger Logger
+		{
+			get { return this._Logger; }
+			set { this._Logger = value; }
 		}
 
 		#region Nice-to-have properties

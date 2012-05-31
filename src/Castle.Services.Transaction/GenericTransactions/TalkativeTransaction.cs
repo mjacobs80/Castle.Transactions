@@ -18,11 +18,11 @@
 namespace Castle.Services.Transaction
 {
 	using System;
-	using log4net;
+
+	using Castle.Core.Logging;
 
 	public sealed class TalkativeTransaction : TransactionBase, IEventPublisher
 	{
-		private static readonly ILog _Logger = LogManager.GetLogger(typeof (TalkativeTransaction));
 		private bool _IsAmbient;
         private bool _IsReadOnly;
 
@@ -57,7 +57,7 @@ namespace Castle.Services.Transaction
 			}
 			catch (TransactionException e)
 			{
-				_Logger.TryLogFail(() => TransactionFailed.Fire(this, new TransactionFailedEventArgs(this, e)));
+				this.Logger.TryLogFail(() => TransactionFailed.Fire(this, new TransactionFailedEventArgs(this, e)));
 				throw;
 			}
 		}
@@ -69,11 +69,11 @@ namespace Castle.Services.Transaction
 			try
 			{
 				base.Commit();
-				_Logger.TryLogFail(() => TransactionCompleted.Fire(this, new TransactionEventArgs(this)));
+				this.Logger.TryLogFail(() => TransactionCompleted.Fire(this, new TransactionEventArgs(this)));
 			}
 			catch (TransactionException e)
 			{
-				_Logger.TryLogFail(() => TransactionFailed.Fire(this, new TransactionFailedEventArgs(this, e)));
+				this.Logger.TryLogFail(() => TransactionFailed.Fire(this, new TransactionFailedEventArgs(this, e)));
 				throw;
 			}
 		}
@@ -85,11 +85,11 @@ namespace Castle.Services.Transaction
 			try
 			{
 				base.Rollback();
-				_Logger.TryLogFail(() => TransactionRolledBack.Fire(this, new TransactionEventArgs(this)));
+				this.Logger.TryLogFail(() => TransactionRolledBack.Fire(this, new TransactionEventArgs(this)));
 			}
 			catch (TransactionException e)
 			{
-				_Logger.TryLogFail(() => TransactionFailed.Fire(this, new TransactionFailedEventArgs(this, e)));
+				this.Logger.TryLogFail(() => TransactionFailed.Fire(this, new TransactionFailedEventArgs(this, e)));
 				throw;
 			}
 		}

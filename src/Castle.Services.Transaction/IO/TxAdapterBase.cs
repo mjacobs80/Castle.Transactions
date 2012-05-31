@@ -19,6 +19,8 @@ namespace Castle.Services.Transaction.IO
 {
 	using System;
 
+	using Castle.Core.Logging;
+
 	///<summary>
 	/// Adapter base class for the file and directory adapters.
 	///</summary>
@@ -26,6 +28,7 @@ namespace Castle.Services.Transaction.IO
 	{
 		private readonly bool _AllowOutsideSpecifiedFolder;
 		private readonly string _SpecifiedFolder;
+		private ILogger _logger = NullLogger.Instance;
 		private ITransactionManager _TxManager;
 		private bool _UseTransactions = true;
 		private bool _OnlyJoinExisting;
@@ -39,6 +42,12 @@ namespace Castle.Services.Transaction.IO
 
 			_AllowOutsideSpecifiedFolder = !constrainToSpecifiedDir;
 			_SpecifiedFolder = specifiedDir;
+		}
+
+		public ILogger Logger
+		{
+			get { return this._logger; }
+			set { this._logger = value; }
 		}
 
 		/// <summary>

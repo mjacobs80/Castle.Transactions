@@ -19,7 +19,6 @@ namespace Castle.Services.Transaction.IO
 {
 	using System;
 	using System.IO;
-	using log4net;
 
 	/// <summary>
 	/// Adapter which wraps the functionality in <see cref="File"/>
@@ -28,7 +27,6 @@ namespace Castle.Services.Transaction.IO
 	public sealed class DirectoryAdapter : TxAdapterBase, IDirectoryAdapter
 	{
 		private readonly IMapPath _PathFinder;
-		private readonly ILog _Logger = LogManager.GetLogger(typeof (DirectoryAdapter));
 
 		///<summary>
 		/// c'tor
@@ -41,8 +39,6 @@ namespace Castle.Services.Transaction.IO
 		{
 			if (pathFinder == null) 
 				throw new ArgumentNullException("pathFinder");
-
-			_Logger.Debug("DirectoryAdapter created.");
 
 			_PathFinder = pathFinder;
 		}
