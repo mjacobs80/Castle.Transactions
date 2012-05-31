@@ -163,7 +163,7 @@
     <Compile Include="Exceptions\TransactionModeUnsupportedException.cs" />
     <Compile Include="GenericTransactions\TransactionBase.cs" />
     <Compile Include="GenericTransactions\ChildTransaction.cs" />
-    <Compile Include="GenericTransactions\TalkativeTransaction.cs" />
+    <Compile Include="GenericTransactions\TalkactiveTransaction.cs" />
     <Compile Include="IEventPublisher.cs" />
     <Compile Include="IO\IDirectoryAdapter.cs" />
     <Compile Include="IO\IFileAdapter.cs" />
@@ -183,8 +183,8 @@
     <Compile Include="IFileTransaction.cs" />
     <Compile Include="FileTransactions\IKernelTransaction.cs" />
     <Compile Include="FileTransactions\SafeFindHandle.cs" />
-    <Compile Include="FileTransactions\SafeTxHandle.cs" />
-    <Compile Include="IO\TxAdapterBase.cs" />
+    <Compile Include="FileTransactions\SafeTransactionHandle.cs" />
+    <Compile Include="IO\TransactionAdapterBase.cs" />
     <Compile Include="IActivityManager.cs" />
     <Compile Include="IResource.cs">
       <SubType>Code</SubType>

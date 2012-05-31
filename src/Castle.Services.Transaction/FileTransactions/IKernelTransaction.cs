@@ -29,6 +29,6 @@ namespace Castle.Services.Transaction
 		/// might not release the transaction handle properly.
 		/// </summary>
 		/// <param name="handle"></param>
-		void GetHandle([Out] out SafeTxHandle handle);
+		void GetHandle([Out] out SafeTransactionHandle handle);
 	}
 }

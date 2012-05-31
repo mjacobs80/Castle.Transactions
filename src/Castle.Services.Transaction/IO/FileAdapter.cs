@@ -28,7 +28,7 @@ namespace Castle.Services.Transaction.IO
 	/// This adapter chooses intelligently whether there's an ambient
 	/// transaction, and if there is, joins it.
 	/// </summary>
-	public sealed class FileAdapter : TxAdapterBase, IFileAdapter
+	public sealed class FileAdapter : TransactionAdapterBase, IFileAdapter
 	{
 		///<summary>
 		/// c'tor

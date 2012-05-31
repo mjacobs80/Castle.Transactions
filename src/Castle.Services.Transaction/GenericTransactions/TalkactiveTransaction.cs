@@ -19,9 +19,7 @@ namespace Castle.Services.Transaction
 {
 	using System;
 
-	using Castle.Core.Logging;
-
-	public sealed class TalkativeTransaction : TransactionBase, IEventPublisher
+	public sealed class TalkactiveTransaction : TransactionBase, IEventPublisher
 	{
 		private bool _IsAmbient;
         private bool _IsReadOnly;
@@ -30,7 +28,7 @@ namespace Castle.Services.Transaction
 		public event EventHandler<TransactionFailedEventArgs> TransactionFailed;
 		public event EventHandler<TransactionEventArgs> TransactionRolledBack;
 
-		public TalkativeTransaction(TransactionMode transactionMode, IsolationMode isolationMode, bool isAmbient, bool isReadOnly) : 
+		public TalkactiveTransaction(TransactionMode transactionMode, IsolationMode isolationMode, bool isAmbient, bool isReadOnly) : 
 			base(null, transactionMode, isolationMode)
 		{
 			_IsAmbient = isAmbient;

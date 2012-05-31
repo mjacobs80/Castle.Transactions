@@ -98,10 +98,10 @@ namespace Castle.Facilities.AutoTx.Tests
 			container.Register(Component.For<ProxyService>().Named("delegatecomp"));
 
 			var fa = (FileAdapter) container.Resolve<IFileAdapter>();
-			Assert.That(fa.TxManager, Is.Not.Null);
+			Assert.That(fa.TransactionManager, Is.Not.Null);
 
 			var da = (DirectoryAdapter) container.Resolve<IDirectoryAdapter>();
-			Assert.That(da.TxManager, Is.Not.Null);
+			Assert.That(da.TransactionManager, Is.Not.Null);
 		}
 
 		[Test]
@@ -118,10 +118,10 @@ namespace Castle.Facilities.AutoTx.Tests
 			container.Register(Component.For<ProxyService>().Named("delegatecomp"));
 
 			var fa = (FileAdapter) container.Resolve<IFileAdapter>();
-			Assert.That(fa.TxManager, Is.Not.Null);
+			Assert.That(fa.TransactionManager, Is.Not.Null);
 
 			var da = (DirectoryAdapter) container.Resolve<IDirectoryAdapter>();
-			Assert.That(da.TxManager, Is.Not.Null);
+			Assert.That(da.TransactionManager, Is.Not.Null);
 		}
 	}
 

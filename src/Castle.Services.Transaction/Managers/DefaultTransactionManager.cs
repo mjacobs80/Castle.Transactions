@@ -139,7 +139,7 @@ namespace Castle.Services.Transaction
 
         private TransactionBase InstantiateTransaction(TransactionMode mode, IsolationMode isolationMode, bool ambient, bool readOnly)
 		{
-			var t = new TalkativeTransaction(mode, isolationMode, ambient, readOnly);
+			var t = new TalkactiveTransaction(mode, isolationMode, ambient, readOnly);
         	t.Logger = this.Logger.CreateChildLogger("TalkactiveTransaction");
 
 			t.TransactionCompleted += CompletedHandler;

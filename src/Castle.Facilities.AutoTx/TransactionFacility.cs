@@ -102,7 +102,7 @@ namespace Castle.Facilities.AutoTx
 			Kernel.Register(Component.For<IFileAdapter>().Named("file.adapter").Instance(fileAdapter));
 
 			if (Kernel.HasComponent(typeof(ITransactionManager)))
-				fileAdapter.TxManager = directoryAdapter.TxManager = Kernel.Resolve<ITransactionManager>();
+				fileAdapter.TransactionManager = directoryAdapter.TransactionManager = Kernel.Resolve<ITransactionManager>();
 			else
 				Kernel.ComponentRegistered += Kernel_ComponentRegistered;
 				
@@ -116,8 +116,8 @@ namespace Castle.Facilities.AutoTx
 				{
 					var transactionManager = this.Kernel.Resolve<ITransactionManager>();
 
-					((DirectoryAdapter) this.Kernel.Resolve<IDirectoryAdapter>()).TxManager = transactionManager;
-					((FileAdapter) this.Kernel.Resolve<IFileAdapter>()).TxManager = transactionManager;
+					((DirectoryAdapter) this.Kernel.Resolve<IDirectoryAdapter>()).TransactionManager = transactionManager;
+					((FileAdapter) this.Kernel.Resolve<IFileAdapter>()).TransactionManager = transactionManager;
 				}
 			}
 		}

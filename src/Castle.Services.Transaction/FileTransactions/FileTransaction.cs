@@ -43,7 +43,7 @@ namespace Castle.Services.Transaction
 	/// </remarks>
 	public sealed class FileTransaction : TransactionBase, IFileTransaction
 	{
-		private SafeTxHandle _TransactionHandle;
+		private SafeTransactionHandle _TransactionHandle;
 		private bool _Disposed;
 
 		#region Constructors
@@ -101,7 +101,7 @@ namespace Castle.Services.Transaction
 				var ktx = (IKernelTransaction) TransactionInterop
 				                               	.GetDtcTransaction(System.Transactions.Transaction.Current);
 
-				SafeTxHandle handle;
+				SafeTransactionHandle handle;
 				ktx.GetHandle(out handle);
 
 				// even though _TransactionHandle can already contain a handle if this thread 
@@ -836,7 +836,7 @@ namespace Castle.Services.Transaction
 		private static extern bool CreateHardLinkTransacted([In] string lpFileName,
 		                                                    [In] string lpExistingFileName,
 		                                                    [In] IntPtr lpSecurityAttributes,
-		                                                    [In] SafeTxHandle hTransaction);
+		                                                    [In] SafeTransactionHandle hTransaction);
 
 		[return: MarshalAs(UnmanagedType.Bool)]
 		[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
@@ -844,7 +844,7 @@ namespace Castle.Services.Transaction
 		                                              [In] string lpNewFileName, [In] IntPtr lpProgressRoutine,
 		                                              [In] IntPtr lpData,
 		                                              [In] MoveFileFlags dwFlags,
-		                                              [In] SafeTxHandle hTransaction);
+		                                              [In] SafeTransactionHandle hTransaction);
 
 		[DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
 		private static extern SafeFileHandle CreateFileTransactedW(
@@ -855,7 +855,7 @@ namespace Castle.Services.Transaction
 			[In] NativeFileMode dwCreationDisposition,
 			[In] uint dwFlagsAndAttributes,
 			[In] IntPtr hTemplateFile,
-			[In] SafeTxHandle hTransaction,
+			[In] SafeTransactionHandle hTransaction,
 			[In] IntPtr pusMiniVersion,
 			[In] IntPtr pExtendedParameter);
 
@@ -866,7 +866,7 @@ namespace Castle.Services.Transaction
 		[DllImport("kernel32.dll", SetLastError = true)]
 		private static extern bool DeleteFileTransactedW(
 			[MarshalAs(UnmanagedType.LPWStr)] string file,
-			SafeTxHandle transaction);
+			SafeTransactionHandle transaction);
 
 		#endregion
 
@@ -892,7 +892,7 @@ namespace Castle.Services.Transaction
 			[MarshalAs(UnmanagedType.LPWStr)] string lpTemplateDirectory,
 			[MarshalAs(UnmanagedType.LPWStr)] string lpNewDirectory,
 			IntPtr lpSecurityAttributes,
-			SafeTxHandle hTransaction);
+			SafeTransactionHandle hTransaction);
 
 		/// <summary>
 		/// http://msdn.microsoft.com/en-us/library/aa365490(VS.85).aspx
@@ -908,7 +908,7 @@ namespace Castle.Services.Transaction
 		[DllImport("kernel32.dll", SetLastError = true)]
 		private static extern bool RemoveDirectoryTransactedW(
 			[MarshalAs(UnmanagedType.LPWStr)] string lpPathName,
-			SafeTxHandle hTransaction);
+			SafeTransactionHandle hTransaction);
 
 		/// <summary>
 		/// http://msdn.microsoft.com/en-us/library/aa364966(VS.85).aspx
@@ -938,7 +938,7 @@ namespace Castle.Services.Transaction
 			[In] int nBufferLength,
 			[Out] StringBuilder lpBuffer,
 			[In, Out] ref IntPtr lpFilePart,
-			[In] SafeTxHandle hTransaction);
+			[In] SafeTransactionHandle hTransaction);
 
 /*
  * HANDLE WINAPI FindFirstFileTransacted(
@@ -975,7 +975,7 @@ namespace Castle.Services.Transaction
 			[In] FINDEX_SEARCH_OPS fSearchOp,
 			IntPtr lpSearchFilter,
 			[In] uint dwAdditionalFlags,
-			[In] SafeTxHandle hTransaction);
+			[In] SafeTransactionHandle hTransaction);
 
 		private SafeFindHandle findFirstFileTransacted(string filePath, bool directory)
 		{
@@ -1058,9 +1058,9 @@ namespace Castle.Services.Transaction
 			uint timeout,
 			string description);
 
-		private static SafeTxHandle createTransaction(string description)
+		private static SafeTransactionHandle createTransaction(string description)
 		{
-			return new SafeTxHandle(CreateTransaction(IntPtr.Zero, IntPtr.Zero, 0, 0, 0, 0, description));
+			return new SafeTransactionHandle(CreateTransaction(IntPtr.Zero, IntPtr.Zero, 0, 0, 0, 0, description));
 		}
 
 		/// <summary>
@@ -1076,7 +1076,7 @@ namespace Castle.Services.Transaction
 		/// For more information, see KTM Security and Access Rights.</param>
 		/// <returns></returns>
 		[DllImport("ktmw32.dll", SetLastError = true)]
-		private static extern bool CommitTransaction(SafeTxHandle transaction);
+		private static extern bool CommitTransaction(SafeTransactionHandle transaction);
 
 		/// <summary>
 		/// Requests that the specified transaction be rolled back. This function is synchronous.
@@ -1084,7 +1084,7 @@ namespace Castle.Services.Transaction
 		/// <param name="transaction">A handle to the transaction.</param>
 		/// <returns>If the function succeeds, the return value is nonzero.</returns>
 		[DllImport("ktmw32.dll", SetLastError = true)]
-		private static extern bool RollbackTransaction(SafeTxHandle transaction);
+		private static extern bool RollbackTransaction(SafeTransactionHandle transaction);
 
 		#endregion
 

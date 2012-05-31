@@ -192,7 +192,7 @@ namespace Castle.Services.Transaction.Tests
 		{
 			ITransaction root =
 				tm.CreateTransaction(TransactionMode.Requires, IsolationMode.Unspecified);
-			Assert.IsTrue(root is TalkativeTransaction);
+			Assert.IsTrue(root is TalkactiveTransaction);
 			root.Begin();
 
 			ITransaction child1 = tm.CreateTransaction(TransactionMode.Requires, IsolationMode.Unspecified);
@@ -219,7 +219,7 @@ namespace Castle.Services.Transaction.Tests
 		{
 			ITransaction root =
 				tm.CreateTransaction(TransactionMode.Requires, IsolationMode.Unspecified);
-			Assert.IsTrue(root is TalkativeTransaction);
+			Assert.IsTrue(root is TalkactiveTransaction);
 			root.Begin();
 
 			ITransaction child1 = tm.CreateTransaction(TransactionMode.Requires, IsolationMode.Unspecified);

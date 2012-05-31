@@ -29,12 +29,12 @@ namespace Castle.Services.Transaction
 	
 	[SecurityPermission(SecurityAction.InheritanceDemand, UnmanagedCode = true)]
 	[SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
-	public sealed class SafeTxHandle : SafeHandleZeroOrMinusOneIsInvalid
+	public sealed class SafeTransactionHandle : SafeHandleZeroOrMinusOneIsInvalid
 	{
 		/// <summary>
 		/// Default c'tor
 		/// </summary>
-		public SafeTxHandle() : base(true)
+		public SafeTransactionHandle() : base(true)
 		{
 		}
 
@@ -43,7 +43,7 @@ namespace Castle.Services.Transaction
 		///</summary>
 		///<param name="handle">The transactional handle.</param>
 		[ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
-		public SafeTxHandle(IntPtr handle)
+		public SafeTransactionHandle(IntPtr handle)
 			: base(true)
 		{
 			base.handle = handle;
