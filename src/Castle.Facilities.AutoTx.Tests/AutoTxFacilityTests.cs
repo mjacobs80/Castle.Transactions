@@ -90,7 +90,7 @@ namespace Castle.Facilities.AutoTx.Tests
 		{
 			var container = new WindsorContainer();
 
-			container.AddFacility("transactionmanagement", new AutoTxFacility());
+			container.AddFacility(new AutoTxFacility());
 			container.Register(
 				Component.For<ITransactionManager>().ImplementedBy<MockTransactionManager>().Named("transactionmanager"));
 
@@ -112,7 +112,7 @@ namespace Castle.Facilities.AutoTx.Tests
 			// these lines have been permuted
 			container.Register(
 				Component.For<ITransactionManager>().ImplementedBy<MockTransactionManager>().Named("transactionmanager"));
-			container.AddFacility("transactionmanagement", new AutoTxFacility());
+			container.AddFacility(new AutoTxFacility());
 
 			container.Register(Component.For<CustomerService>().Named("mycomp"));
 			container.Register(Component.For<ProxyService>().Named("delegatecomp"));
