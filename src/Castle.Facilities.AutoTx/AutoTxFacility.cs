@@ -25,7 +25,7 @@ namespace Castle.Facilities.AutoTx
 	/// <summary>
 	/// Augments the kernel to handle transactional components
 	/// </summary>
-	public class TransactionFacility : AbstractFacility
+	public class AutoTxFacility : AbstractFacility
 	{
 		private bool _AllowAccessOutsideRootFolder = true;
 		private string _RootFolder;
@@ -33,7 +33,7 @@ namespace Castle.Facilities.AutoTx
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		public TransactionFacility()
+		public AutoTxFacility()
 		{
 		}
 
@@ -42,7 +42,7 @@ namespace Castle.Facilities.AutoTx
 		/// </summary>
 		/// <param name="allowAccessOutsideRootFolder"><see cref="AllowAccessOutsideRootFolder"/></param>
 		/// <param name="rootFolder"></param>
-		public TransactionFacility(bool allowAccessOutsideRootFolder,
+		public AutoTxFacility(bool allowAccessOutsideRootFolder,
 		                           string rootFolder)
 		{
 			_AllowAccessOutsideRootFolder = allowAccessOutsideRootFolder;

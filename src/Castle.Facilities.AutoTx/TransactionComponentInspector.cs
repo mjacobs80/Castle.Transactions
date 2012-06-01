@@ -135,40 +135,6 @@ namespace Castle.Facilities.AutoTx
 					"the following methods: {1}",
 					model.Implementation.FullName,
 					string.Join(", ", problematicMethods.ToArray())));
-
-			//if (model.Service == null || model.Service.IsInterface)
-			//{
-			//	return;
-			//}
-
-			//TransactionMetaInfo meta = store.GetMetaFor(model.Implementation);
-
-			//if (meta == null)
-			//{
-			//	return;
-			//}
-
-			//ArrayList problematicMethods = new ArrayList();
-
-			//foreach(MethodInfo method in meta.Methods)
-			//{
-			//	if (!method.IsVirtual)
-			//	{
-			//		problematicMethods.Add(method.Name);
-			//	}
-			//}
-
-			//if (problematicMethods.Count != 0)
-			//{
-			//	String[] methodNames = (String[]) problematicMethods.ToArray(typeof(String));
-
-			//	String message = String.Format("The class {0} wants to use transaction interception, " +
-			//								   "however the methods must be marked as virtual in order to do so. Please correct " +
-			//								   "the following methods: {1}", model.Implementation.FullName,
-			//								   String.Join(", ", methodNames));
-
-			//	throw new FacilityException(message);
-			//}
 		}
 
 		/// <summary>

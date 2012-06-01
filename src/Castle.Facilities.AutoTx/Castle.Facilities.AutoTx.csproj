@@ -159,7 +159,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="InjectTransaction.cs" />
     <Compile Include="TransactionComponentInspector.cs" />
-    <Compile Include="TransactionFacility.cs" />
+    <Compile Include="AutoTxFacility.cs" />
     <Compile Include="TransactionInterceptor.cs" />
     <Compile Include="TransactionMetaInfo.cs" />
     <Compile Include="TransactionMetaInfoStore.cs" />

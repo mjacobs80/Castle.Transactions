@@ -31,7 +31,7 @@ namespace Castle.Facilities.AutoTx.Tests
 		{
 			WindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
 
-			container.AddFacility(new TransactionFacility());
+			container.AddFacility(new AutoTxFacility());
 
 			container.Register(Component.For<ITransactionManager>().ImplementedBy<MockTransactionManager>().Named("transactionmanager"));
 			container.Register(Component.For<SubTransactionalComp>().Named("comp"));
@@ -52,7 +52,7 @@ namespace Castle.Facilities.AutoTx.Tests
 		{
 			WindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
 
-			container.AddFacility(new TransactionFacility());
+			container.AddFacility(new AutoTxFacility());
 
 			container.Register(Component.For<ITransactionManager>().ImplementedBy<MockTransactionManager>().Named("transactionmanager"));
 
@@ -87,7 +87,7 @@ namespace Castle.Facilities.AutoTx.Tests
 		{
 			WindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
 
-			container.AddFacility(new TransactionFacility());
+			container.AddFacility(new AutoTxFacility());
 			container.Register(Component.For<ITransactionManager>().ImplementedBy<MockTransactionManager>().Named("transactionmanager"));
 			container.Register(Component.For<ICustomerService>().ImplementedBy<AnotherCustomerService>().Named("services.customer"));
 
@@ -120,7 +120,7 @@ namespace Castle.Facilities.AutoTx.Tests
 		{
 			WindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
 
-			container.AddFacility(new TransactionFacility());
+			container.AddFacility(new AutoTxFacility());
 			container.Register(Component.For<ITransactionManager>().ImplementedBy<MockTransactionManager>().Named("transactionmanager"));
 			container.Register(Component.For(typeof(GenericService<>)).Named("generic.services"));
 
@@ -199,7 +199,7 @@ namespace Castle.Facilities.AutoTx.Tests
 		{
 			WindsorContainer container = new WindsorContainer();
 
-			container.AddFacility(new TransactionFacility());
+			container.AddFacility(new AutoTxFacility());
 
 			container.Register(Component.For<ITransactionManager>().ImplementedBy<MockTransactionManager>().Named("transactionmanager"));
 
