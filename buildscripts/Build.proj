@@ -5,7 +5,7 @@
 
 	Main build script
 
-Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ limitations under the License.
 -->
 
 <Project DefaultTargets="BuildProject" InitialTargets="CheckRequiredProperties" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
-	
+
 	<!-- Root Path definition relative for actual build file -->
 	<PropertyGroup>
 		<RootPath Condition="'$(RootPath)' == ''">$(MSBuildProjectDirectory)/..</RootPath>
@@ -42,22 +42,22 @@ limitations under the License.
 		<Error Condition="'$(Project_Minor)' == ''" Text="The Project_Minor property has not been set, please set it in Settings.proj." />
 		<Error Condition="'$(Project_Build)' == ''" Text="The Project_Build property has not been set, please set it in Settings.proj." />
 	</Target>
-		
+
 
 	<!--
 		Public targets
 	-->
-	
+
 	<Target
 		Name="BuildProject"
 		>
 		<MSBuild Projects="$(SolutionPath)" Targets="Build" Properties="OutputPath=$(OutputPath);Configuration=$(Configuration);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)">
 
 			<Output TaskParameter="TargetOutputs" ItemName="AllBinaries" />
-		
+
 		</MSBuild>
 		<Message Text="Binaries built from solution: @(AllBinaries)" />
-		
+
 		<!-- Resolve test projects -->
 		<RegexMatch Input="@(AllBinaries)" Expression="$(TestDetectionExpression)">
 			<Output TaskParameter="Output" ItemName="TestAssemblies" />
@@ -66,20 +66,19 @@ limitations under the License.
 		<CreateProperty Value="@(TestAssemblies->'&quot;%(FullPath)&quot;', ' ')">
 			<Output PropertyName="TestAssemblies" TaskParameter="Value"/>
 		</CreateProperty>
-		<Message Text="Test assemblies transformed to quoted list: $(TestAssemblies)" />
 
 		<!-- Resolve the libraries code projects -->
 		<CreateItem
 			Include="@(AllBinaries)"
 			Exclude="@(TestAssemblies)">
-			
+
 			<Output TaskParameter="Include" ItemName="AppAssemblies"/>
 		</CreateItem>
 
 		<!-- Pick up the PDB files. This is kind of hard coded to the location of the AppAssemblies, but I currently don't see another way  -->
 		<CreateItem
 			Include="@(AppAssemblies->'%(RelativeDir)%(FileName).pdb')">
-		
+
 			<Output TaskParameter="Include" ItemName="PdbFiles"/>
 		</CreateItem>
 
@@ -87,14 +86,14 @@ limitations under the License.
 		<CreateItem
 			Include="@(AppAssemblies->'%(RelativeDir)%(FileName).xml')"
 			Condition="Exists('%(AppAssemblies.RelativeDir)%(AppAssemblies.FileName).xml')">
-			
+
 			<Output TaskParameter="Include" ItemName="DocumentationFiles"/>
-		
+
 		</CreateItem>
 
 	</Target>
 
-	
+
 	<Target Name="RebuildAll" DependsOnTargets="CleanAll;BuildProject" />
 	<Target Name="ClickToBuild" DependsOnTargets="RebuildAll;_PreparePackage">
 		<RemoveDir Directories="$(OutputPath)" />
@@ -113,14 +112,14 @@ limitations under the License.
   		<RemoveDir Directories="$(BuildPath)" Condition=" Exists('$(BuildPath)') "/>
 	</Target>
 
-	
+
 	<Target
 		Name="RunAllTests"
 		DependsOnTargets="BuildProject"
 		>
-		
+
 		<CallTarget Targets="_ExecTestRunner" />
-	
+
 	</Target>
 
 	<!-- Creates Zip file for Release -->
@@ -148,13 +147,13 @@ limitations under the License.
 			WorkingDirectory="$(PackageDir)"
 			ZipFileName="$(Build_ZipFilePath)"
 			/>
-			
+
 		<Message Text="##teamcity[publishArtifacts '$(Build_ZipFilePath)']" Condition="$(TEAMCITY_VERSION) != ''" />
 
 		<RemoveDir Directories="$(PackageDir)" ContinueOnError="true" />
 
 	</Target>
-	
+
 	<!--
 	==================================================
 		Internal targets
@@ -164,13 +163,13 @@ limitations under the License.
 		Name="_ExecTestRunner"
 		Condition="$(TestRunner_Enabled)"
 		>
-		
-		<CallTarget Targets="_ExecNUnit" Condition="$(BuildConfigKey) != 'SL30' and $(BuildConfigKey) != 'SL40'" />
-	
-		<CallTarget Targets="_ExecStatLight" Condition="$(BuildConfigKey) == 'SL30' or $(BuildConfigKey) == 'SL40'" />
+
+		<CallTarget Targets="_ExecNUnit" Condition="$(BuildConfigKey) != 'SL4'" />
+
+		<CallTarget Targets="_ExecStatLight" Condition="$(BuildConfigKey) == 'SL4'" />
 
 	</Target>
-	
+
 
 	<!-- Use TeamCity's when running on the build server -->
 	<UsingTask TaskName="NUnitTeamCity" AssemblyFile="$(teamcity_dotnet_nunitlauncher_msbuild_task)" Condition=" '$(teamcity_dotnet_nunitlauncher_msbuild_task)' != '' "/>
@@ -181,13 +180,13 @@ limitations under the License.
 
 		<MakeDir Directories="$(TestResultsPath)" Condition="'$(TestResultsPath)' != '' And !Exists('$(TestResultsPath)')" />
 
-		<CreateProperty Value="$(TestResultsPath)/nunit-results.xml" Condition="'$(NUnitTestResultXmlFiles)' == ''">
+		<CreateProperty Value='"$(TestResultsPath)/nunit-results.xml"' Condition="'$(NUnitTestResultXmlFiles)' == ''">
 			<Output PropertyName="NUnitTestResultXmlFiles" TaskParameter="Value"/>
 		</CreateProperty>
-		
+
 		<Message Text="Running tests from assemblies: $(TestAssemblies)" />
-		
-		<Exec Command="$(NUnitPath)/nunit-console-x86.exe /nologo $(TestAssemblies) /xml=$(NUnitTestResultXmlFiles) /framework=$(TargetFrameworkVersion)" Condition=" '$(TEAMCITY_VERSION)' == '' " />
+
+		<Exec Command='"$(NUnitPath)/nunit-console-x86.exe" /nologo $(TestAssemblies) /xml=$(NUnitTestResultXmlFiles) /framework=$(TargetFrameworkVersion)' Condition=" '$(TEAMCITY_VERSION)' == '' " />
 
 		<Exec Command="$(MonoShell) $(teamcity_dotnet_nunitlauncher) mono-2.0 x86 NUnit-2.5.5 $(OutputPath)Castle.Core.Tests.dll" Condition="$(MonoShell) != ''" />
 
@@ -204,7 +203,7 @@ limitations under the License.
 		Name="_ExecStatLight"
 		>
 
-		<CreateProperty Value='$(ToolsPath)\StatLight\StatLight.exe -b -x="$(OutputPath)Castle.Core.Tests.xap" -o=NUnit'>
+		<CreateProperty Value='$(ToolsPath)\StatLight\StatLight.exe -x="$(OutputPath)Castle.Windsor.Tests.xap" -o=NUnit'>
 			<Output PropertyName="StatLightCmdLine" TaskParameter="Value"/>
 		</CreateProperty>
 
@@ -259,17 +258,6 @@ limitations under the License.
 		<Copy
 			SourceFiles="@(CopyToPackageDirectory)"
 			DestinationFiles="@(CopyToPackageDirectory->'%(DestinationFolder)/%(RecursiveDir)%(Filename)%(Extension)')"
-			/>
-		
-		<CreateItem
-			Include="$(OutputPath)**\Castle.Components.Validator.resources.dll"
-			AdditionalMetadata="DestinationFolder=$(PackageDir)/bin">
-
-			<Output TaskParameter="Include" ItemName="CopyToPackageDirectory__"/>
-		</CreateItem>
-		<Copy
-			SourceFiles="@(CopyToPackageDirectory__)"
-			DestinationFiles="@(CopyToPackageDirectory__->'%(DestinationFolder)/%(RecursiveDir)%(Filename)%(Extension)')"
 			/>
 
 	</Target>

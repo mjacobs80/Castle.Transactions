@@ -1,12 +1,12 @@
 @ECHO OFF
 REM ****************************************************************************
-REM Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+REM Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 REM Licensed under the Apache License, Version 2.0 (the "License");
 REM you may not use this file except in compliance with the License.
 REM You may obtain a copy of the License at
-REM 
+REM
 REM     http://www.apache.org/licenses/LICENSE-2.0
-REM 
+REM
 REM Unless required by applicable law or agreed to in writing, software
 REM distributed under the License is distributed on an "AS IS" BASIS,
 REM WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,9 @@ IF "%1" == "" goto no_nothing
 IF /i "%1" == "NET40" (SET FrameworkVersion=v4.0)
 IF /i "%1" == "NET40" (SET BuildConfigKey=NET40)
 
+IF /i "%1" == "NET40CP" (SET FrameworkVersion=v4.0)
+IF /i "%1" == "NET40CP" (SET BuildConfigKey=NET40CP)
+
 IF /i "%1" == "NET35" (SET FrameworkVersion=v3.5)
 IF /i "%1" == "NET35" (SET BuildConfigKey=NET35)
 
@@ -32,15 +35,10 @@ IF /i "%1" == "MONO28" (SET FrameworkVersion=v3.5)
 IF /i "%1" == "MONO28" (SET BuildConfigKey=MONO28)
 
 
-IF /i "%1" == "SL3" (SET FrameworkVersion=v3.0)
-IF /i "%1" == "SL3" (SET BuildConfigKey=SL30)
-IF /i "%1" == "SL30" (SET FrameworkVersion=v3.0)
-IF /i "%1" == "SL30" (SET BuildConfigKey=SL30)
-
 IF /i "%1" == "SL4" (SET FrameworkVersion=v4.0)
-IF /i "%1" == "SL4" (SET BuildConfigKey=SL40)
+IF /i "%1" == "SL4" (SET BuildConfigKey=SL4)
 IF /i "%1" == "SL40" (SET FrameworkVersion=v4.0)
-IF /i "%1" == "SL40" (SET BuildConfigKey=SL40)
+IF /i "%1" == "SL40" (SET BuildConfigKey=SL4)
 
 IF "%2" == "" goto no_target_and_config
 SET BuildTarget=%2
