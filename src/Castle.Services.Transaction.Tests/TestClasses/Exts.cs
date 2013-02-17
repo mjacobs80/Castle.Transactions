@@ -23,7 +23,8 @@ namespace Castle.Services.Transaction.Tests
 	{
 		/// <summary>
 		/// Combines an input path and a path together
-		/// using <see cref="System.IO.Path.Combine"/> and returns the result.
+		/// using <see><cref>System.IO.Path.Combine</cref></see>
+		/// and returns the result.
 		/// </summary>
 		public static string Combine(this string input, string path)
 		{
