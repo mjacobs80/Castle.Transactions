@@ -35,7 +35,7 @@ steps:
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)\src\Castle.Services.Transaction\bin\NET45-Release'
-    Contents: '**'
+    Contents: '**\Castle.Services.Transaction.*'
     TargetFolder: '$(Build.ArtifactStagingDirectory)\build-output'
     CleanTargetFolder: true
 
@@ -45,3 +45,7 @@ steps:
     Contents: '**\*.cs'
     TargetFolder: '$(Build.ArtifactStagingDirectory)\src'
     CleanTargetFolder: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    ArtifactName: 'drop'
