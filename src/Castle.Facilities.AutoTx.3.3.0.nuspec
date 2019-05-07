@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Castle.Facilities.AutoTx</id>
+    <version>3.3.0</version>
+    <title>Castle.Facilities.AutoTx</title>
+    <authors>Castle Project Contributors</authors>
+    <owners>Castle Project</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+    <description>This facility enables ambient easy-to-use declarative transactions through the [Transaction] attribute. This is the glue that holds the bits and pieces from Castle Transactions together and the stuff that will make your co-workers googly-eyed and impressed.</description>
+    <releaseNotes>Updated to run against Castle 3.3 and is built from the 3.3.x fork on github by Maximilian Haru. https://github.com/mjacobs80/Castle.Transactions</releaseNotes>
+    <copyright>Copyright 2004-2012 Castle Project - http://www.castleproject.org/</copyright>
+    <tags>Castle NHibernate</tags>
+    <dependencies>
+      <dependency id="Castle.Core" version="3.3.0" />
+      <dependency id="Castle.Windsor" version="3.3.0" />
+      <dependency id="Castle.Services.Transaction" version="[3.3.0]" />
+    </dependencies>
+  </metadata>
+  <files>
+	<file src="Castle.Facilities.AutoTx\build-output\*.dll" target="lib\net40" />
+	<file src="Castle.Facilities.AutoTx\build-output\*.xml" target="lib\net40" />
+	<file src="Castle.Facilities.AutoTx\build-output\*.pdb" target="lib\net40" />
+	<file src="Castle.Facilities.AutoTx\src\**\*.cs" target="src" />
+  </files>
+</package>

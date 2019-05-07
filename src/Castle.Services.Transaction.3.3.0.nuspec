@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Castle.Services.Transaction</id>
+    <version>3.3.0</version>
+    <title>Castle.Services.Transaction</title>
+    <authors>Castle Project Contributors</authors>
+    <owners>Castle Project</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+    <description>The Castle Transaction Services enables a common interface to both .Net Transactions with LTM/Lightweight Transaction Manager and powerful file-system transactions with Transactional NTFS/TxF.</description>
+    <releaseNotes>Updated to run against Castle 3.3 and is built from the 3.3.x fork on github by Mark Jacobs. https://github.com/mjacobs80/Castle.Transactions</releaseNotes>
+    <copyright>Copyright 2004-2012 Castle Project - http://www.castleproject.org/</copyright>
+    <tags>Castle</tags>
+    <dependencies>
+      <dependency id="Castle.Core" version="3.3.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Castle.Services.Transaction\build-output\*.dll" target="lib\net40" />
+	<file src="Castle.Services.Transaction\build-output\*.xml" target="lib\net40" />
+	<file src="Castle.Services.Transaction\build-output\*.pdb" target="lib\net40" />
+    <file src="Castle.Services.Transaction\src\**\*.cs" target="src" />
+  </files>
+</package>

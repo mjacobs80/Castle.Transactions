@@ -8,3 +8,4 @@ _ReSharper*
 *.ReSharper
 *.cache
 * Thumbs.db
+/.vs/Castle.Transactions/v16/Server/sqlite3

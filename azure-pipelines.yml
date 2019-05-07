@@ -33,17 +33,43 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: CopyFiles@2
+  displayName: 'Copy Castle.Transaction build output'
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)\src\Castle.Services.Transaction\bin\NET45-Release'
     Contents: '**\Castle.Services.Transaction.*'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)\build-output'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\Castle.Services.Transaction\build-output'
     CleanTargetFolder: true
 
 - task: CopyFiles@2
+  displayName: 'Copy Castle.Facilities.AutoTx build output'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)\src\Castle.Facilities.AutoTx\bin\NET45-Release'
+    Contents: '**\Castle.Facilities.AutoTx.*'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\Castle.Facilities.AutoTx\build-output'
+    CleanTargetFolder: true
+
+- task: CopyFiles@2
+  displayName: 'Copy Castle.Services.Transaction Source Code'
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)\src\Castle.Services.Transaction'
     Contents: '**\*.cs'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)\src'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\Castle.Services.Transaction\src'
+    CleanTargetFolder: true
+
+- task: CopyFiles@2
+  displayName: 'Copy Castle.Facilities.AutoTx Source Code'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)\src\Castle.Facilities.AutoTx'
+    Contents: '**\*.cs'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\Castle.Facilities.AutoTx\src'
+    CleanTargetFolder: true
+
+- task: CopyFiles@2
+  displayName: 'Copy Castle.Transaction nuspec'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)\src'
+    Contents: '**\*.nuspec'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
     CleanTargetFolder: true
 
 - task: PublishBuildArtifacts@1
